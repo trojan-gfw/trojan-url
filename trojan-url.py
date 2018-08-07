@@ -28,7 +28,7 @@ def encode(qr):
         if ':' in config['remote_addr']:
             config['remote_addr'] = '[{}]'.format(config['remote_addr'])
         url = 'trojan://{}@{}:{}'.format(base64.b64encode(config['password'][0].encode()).decode() ,config['remote_addr'], config['remote_port'])
-    except Exception as e:
+    except:
         fail('Invalid config')
     try:
         if qr:
@@ -46,7 +46,7 @@ def decode():
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Encode and decode trojan URLs.')
+    parser = argparse.ArgumentParser(description='Encode and decode trojan URLs from and to trojan config.')
     parser.add_argument('-d', '--decode', action='store_true', help='decode input')
     parser.add_argument('-q', '--qrcode', action='store_true', help='output qrcode')
     parser.add_argument('-i', '--input', default='-', metavar='in_file', help='input file (default: "-" for stdin)')
