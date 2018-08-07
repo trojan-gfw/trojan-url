@@ -1,19 +1,36 @@
 #!/usr/bin/env python3
 
+# Trojan-url is a tool for encoding and decoding trojan URLs from and to trojan
+# config. Trojan is an unidentifiable mechanism that helps you bypass GFW.
+# Copyright (C) 2018  GreaterFire
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import sys
 import argparse
 import json
 import qrcode
 import urllib.parse as urlparse
 
-DEFAULT_CONFIG = json.loads("""{"run_type":"client","local_addr":"127.0.0.1",
+DEFAULT_CONFIG = """{"run_type":"client","local_addr":"127.0.0.1",
 "local_port":1080,"remote_addr":"example.com","remote_port":443,"password":[
 "password1"],"append_payload":true,"log_level":1,"ssl":{"verify":true,
 "verify_hostname":true,"cert":"",
 "cipher":"ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:AES128-SHA:AES256-SHA:DES-CBC3-SHA",
 "sni":"example.com","alpn":["h2","http/1.1"],"reuse_session":true,"curves":"",
 "sigalgs":""},"tcp":{"keep_alive":true,"no_delay":true,"fast_open":true,
-"fast_open_qlen":5}}""")
+"fast_open_qlen":5}}"""
 
 def fail(msg):
     print(msg, file=sys.stderr)
@@ -41,16 +58,17 @@ def decode():
     try:
         password, addr_port = url.netloc.split('@')
         password = urlparse.unquote(password)
-        addr, port = addr_port.split(':')
+        addr, port = addr_port.rsplit(':', 1)
         if addr[0] == '[':
             addr = addr[1:-1]
     except:
         fail('Invalid trojan URL')
-    DEFAULT_CONFIG['remote_addr'] = addr
-    DEFAULT_CONFIG['remote_port'] = port
-    DEFAULT_CONFIG['password'][0] = password
-    DEFAULT_CONFIG['ssl']['sni'] = addr
-    json.dump(DEFAULT_CONFIG, sys.stdout, indent=4)
+    config = json.loads(DEFAULT_CONFIG)
+    config['remote_addr'] = addr
+    config['remote_port'] = port
+    config['password'][0] = password
+    config['ssl']['sni'] = addr
+    json.dump(config, sys.stdout, indent=4)
 
 def main():
     parser = argparse.ArgumentParser(description='Encode and decode trojan URLs from and to trojan config.')
