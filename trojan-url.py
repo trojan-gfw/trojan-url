@@ -2,10 +2,9 @@
 
 import sys
 import argparse
-import base64
 import json
 import qrcode
-from urllib.parse import urlparse
+import urllib.parse as urlparse
 
 DEFAULT_CONFIG = json.loads("""{"run_type":"client","local_addr":"127.0.0.1",
 "local_port":1080,"remote_addr":"example.com","remote_port":443,"password":[
@@ -27,23 +26,31 @@ def encode(qr):
             fail('Please provide a client config')
         if ':' in config['remote_addr']:
             config['remote_addr'] = '[{}]'.format(config['remote_addr'])
-        url = 'trojan://{}@{}:{}'.format(base64.b64encode(config['password'][0].encode()).decode() ,config['remote_addr'], config['remote_port'])
+        url = 'trojan://{}@{}:{}'.format(urlparse.quote(config['password'][0], safe=':') ,config['remote_addr'], config['remote_port'])
     except:
         fail('Invalid config')
-    try:
-        if qr:
-            qrcode.make(url).save(sys.stdout, 'PNG')
-        else:
-            print(url)
-    except:
-        fail('Save failed')
+    if qr:
+        qrcode.make(url).save(sys.stdout, 'PNG')
+    else:
+        print(url)
 
 def decode():
-    url = urlparse(sys.stdin.read().strip('\n'))
-    print(url)
+    url = urlparse.urlparse(sys.stdin.read().strip('\n'))
     if url.scheme != 'trojan':
         fail('Not trojan URL')
-
+    try:
+        password, addr_port = url.netloc.split('@')
+        password = urlparse.unquote(password)
+        addr, port = addr_port.split(':')
+        if addr[0] == '[':
+            addr = addr[1:-1]
+    except:
+        fail('Invalid trojan URL')
+    DEFAULT_CONFIG['remote_addr'] = addr
+    DEFAULT_CONFIG['remote_port'] = port
+    DEFAULT_CONFIG['password'][0] = password
+    DEFAULT_CONFIG['ssl']['sni'] = addr
+    json.dump(DEFAULT_CONFIG, sys.stdout, indent=4)
 
 def main():
     parser = argparse.ArgumentParser(description='Encode and decode trojan URLs from and to trojan config.')
