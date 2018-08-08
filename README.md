@@ -59,7 +59,7 @@ trojan://password1@example.com:443
     "local_addr": "127.0.0.1",
     "local_port": 1080,
     "remote_addr": "example.com",
-    "remote_port": "443",
+    "remote_port": 443,
     "password": [
         "password1"
     ],
