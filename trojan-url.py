@@ -61,6 +61,7 @@ def decode():
         addr, port = addr_port.rsplit(':', 1)
         if addr[0] == '[':
             addr = addr[1:-1]
+        port = int(port)
     except:
         fail('Invalid trojan URL')
     config = json.loads(DEFAULT_CONFIG)
