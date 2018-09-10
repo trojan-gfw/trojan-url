@@ -28,8 +28,8 @@ DEFAULT_CONFIG = """{"run_type":"client","local_addr":"127.0.0.1",
 "password1"],"append_payload":true,"log_level":1,"ssl":{"verify":true,
 "verify_hostname":true,"cert":"",
 "cipher":"ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:RSA-AES128-GCM-SHA256:RSA-AES256-GCM-SHA384:RSA-AES128-SHA:RSA-AES256-SHA:RSA-3DES-EDE-SHA",
-"sni":"example.com","alpn":["h2","http/1.1"],"reuse_session":true,"curves":""},
-"tcp":{"no_delay":true,"keep_alive":true,"fast_open":false,"fast_open_qlen":20}}
+"sni":"","alpn":["h2","http/1.1"],"reuse_session":true,"curves":""},"tcp":{
+"no_delay":true,"keep_alive":true,"fast_open":false,"fast_open_qlen":20}}
 """
 
 def fail(msg):
@@ -68,7 +68,6 @@ def decode():
     config['remote_addr'] = addr
     config['remote_port'] = port
     config['password'][0] = password
-    config['ssl']['sni'] = addr
     json.dump(config, sys.stdout, indent=4)
 
 def main():
