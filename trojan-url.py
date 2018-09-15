@@ -23,13 +23,13 @@ import json
 import qrcode
 import urllib.parse as urlparse
 
-DEFAULT_CONFIG = """{"run_type":"client","local_addr":"127.0.0.1",
-"local_port":1080,"remote_addr":"example.com","remote_port":443,"password":[
-"password1"],"append_payload":true,"log_level":1,"ssl":{"verify":true,
-"verify_hostname":true,"cert":"",
-"cipher":"ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:RSA-AES128-GCM-SHA256:RSA-AES256-GCM-SHA384:RSA-AES128-SHA:RSA-AES256-SHA:RSA-3DES-EDE-SHA",
-"sni":"","alpn":["h2","http/1.1"],"reuse_session":true,"curves":""},"tcp":{
-"no_delay":true,"keep_alive":true,"fast_open":false,"fast_open_qlen":20}}
+DEFAULT_CONFIG = """{"run_type":"client","local_addr":"127.0.0.1","local_port":
+1080,"remote_addr":"example.com","remote_port":443,"password":["password1"],
+"append_payload":true,"log_level":1,"ssl":{"verify":true,"verify_hostname":true,
+"cert":"","cipher":"ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-CHACHA20-POLY1305-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:RSA-AES128-GCM-SHA256:RSA-AES256-GCM-SHA384:RSA-AES128-SHA:RSA-AES256-SHA:RSA-3DES-EDE-SHA",
+"sni":"","alpn":["h2","http/1.1"],"reuse_session":true,"session_ticket":false,
+"curves":""},"tcp":{"no_delay":true,"keep_alive":true,"fast_open":false,
+"fast_open_qlen":20}}
 """
 
 def fail(msg):
